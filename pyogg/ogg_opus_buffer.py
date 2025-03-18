@@ -16,33 +16,10 @@ from .pyogg_error import PyOggError
 class OggOpusBuffer():
     """Encodes PCM data into an OggOpus buffer."""
 
-    def __init__(self, 
+    def __init__(self,
                  encoder: OpusBufferedEncoder,
                  custom_pre_skip: Optional[int] = None) -> None:
-        """Construct an OggOpusBuffer.
-
-        f may be either a string giving the path to the file, or
-        an already-opened file handle.
-
-        If f is an already-opened file handle, then it is the
-        user's responsibility to close the file when they are
-        finished with it.  The file should be opened for writing 
-        in binary (not text) mode.
-
-        The encoder should be a
-        OpusBufferedEncoder and should be fully configured before the
-        first call to the `write()` method.
-
-        The Opus encoder requires an amount of "warm up" and when
-        stored in an Ogg container that warm up can be skipped.  When
-        `custom_pre_skip` is None, the required amount of warm up
-        silence is automatically calculated and inserted.  If a custom
-        (non-silent) pre-skip is desired, then `custom_pre_skip`
-        should be specified as the number of samples (per channel).
-        It is then the user's responsibility to pass the non-silent
-        pre-skip samples to `encode()`.
-
-        """
+        """Construct an OggOpusBuffer."""
         # Store the Opus encoder
         self._encoder = encoder
 
@@ -88,6 +65,7 @@ class OggOpusBuffer():
     #
 
     def read(self, n_pages: Optional[int] = None) -> bytes:
+        """Read pages from the Ogg Opus stream.""
         if n_pages is None:
             n_pages = len(self._pages)
         else:
