@@ -106,13 +106,15 @@ class OpusBufferedEncoder(OpusEncoder):
                 "rather than bytes)."
             )
             pcm_ctypes = Buffer.from_buffer(pcm_bytes)
-            
+
+        samples_multiplier = 48000 // self._samples_per_second
         # Either store the encoded packet to return at the end of the
         # method or immediately call the callback with the encoded
         # packet.
         def store_or_callback(encoded_packet: memoryview,
                               samples: int,
                               end_of_stream: bool = False) -> None:
+            samples *= samples_multiplier
             if callback is None:
                 # Store the result
                 results.append((
