@@ -84,7 +84,8 @@ else:
 if (PYOGG_OGG_AVAIL and PYOGG_OPUS_AVAIL):        
     # OggOpusWriter
     from .ogg_opus_writer import OggOpusWriter
-    
+    from .ogg_opus_buffer import OggOpusBuffer
+
 else:
     class OggOpusWriter: # type: ignore
         def __init__(*args, **kw):
