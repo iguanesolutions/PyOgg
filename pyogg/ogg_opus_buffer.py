@@ -65,7 +65,7 @@ class OggOpusBuffer():
     #
 
     def read(self, n_pages: Optional[int] = None) -> bytes:
-        """Read pages from the Ogg Opus stream.""
+        """Read pages from the Ogg Opus stream."""
         if n_pages is None:
             n_pages = len(self._pages)
         else:
