@@ -49,7 +49,7 @@ class OggOpusQueue():
         # when we know if it the last)
         self._current_encoded_packet: Optional[bytes] = None
 
-        self.queue = queue
+        self._queue = queue
 
     def __del__(self) -> None:
         if not self._finished:
@@ -156,9 +156,7 @@ class OggOpusQueue():
         # now have been written)
         del self._current_encoded_packet
 
-    def is_finished(self) -> bool:
-        """Returns True if the stream has been closed."""
-        return self._finished
+        self._queue.put(None)
 
     #
     # Internal methods
@@ -322,11 +320,11 @@ class OggOpusQueue():
         # write without issues.
         HeaderBufferPtr = ctypes.POINTER(ctypes.c_ubyte * self._ogg_page.header_len)
         header = HeaderBufferPtr(self._ogg_page.header.contents)[0]
-        self.queue.put(bytes((header[i] for i in range(self._ogg_page.header_len))))
+        self._queue.put(bytes((header[i] for i in range(self._ogg_page.header_len))))
 
         BodyBufferPtr = ctypes.POINTER(ctypes.c_ubyte * self._ogg_page.body_len)
         body = BodyBufferPtr(self._ogg_page.body.contents)[0]
-        self.queue.put(bytes((body[i] for i in range(self._ogg_page.body_len))))
+        self._queue.put(bytes((body[i] for i in range(self._ogg_page.body_len))))
 
     def _flush(self):
         """ Flush all pages to the file. """
